@@ -4,8 +4,8 @@ from importHelpers import *
 import winsound
 from getpass import getpass
 
-frequency = 2500  # Set Frequency To 2500 Hertz
-duration = 1000  # Set Duration To 1000 ms == 1 second
+frequency = 1500  # Set Frequency To 2500 Hertz
+duration = 400  # Set Duration To 1000 ms == 1 second
 
 user = 'linroot'
 print('user: linroot')
@@ -42,13 +42,13 @@ try:
 
         # Loop over the identified CSV files and import data to the respective tables
         for file in csv_files:
-            print(file)
+            print(f"{file}")
             winsound.Beep(frequency, duration)
             league = identify_lge(file)
             process_csv_file(os.path.join(csv_dir, file), cursor, league, conn)
 
 except mysql.connector.Error as err:
-    print(f"Error: {err}")
+    print(f"Error: {err}\n")
 
 winsound.Beep(frequency, duration)
 winsound.Beep(frequency, duration)

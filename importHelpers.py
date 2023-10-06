@@ -1,4 +1,5 @@
 import csv
+from dataCleaningHelpers import *
 
 def setup_database(cursor, database_name):
     """
@@ -33,12 +34,16 @@ def setup_database(cursor, database_name):
             laps_on_f INT,
             laps_on_r INT,
             lap INT,
-            lap_time TIME,
+            lap_time TIME(3),
             pit VARCHAR(255),
-            sec_one TIME,
-            sec_two TIME,
-            sec_thr TIME,
-            sec_four TIME,
+            sec_one TIME(3),
+            valid_one TINYINT,
+            sec_two TIME(3),
+            valid_two TINYINT,
+            sec_thr TIME(3),
+            valid_thr TINYINT,
+            sec_four TIME(3),
+            valid_four TINYINT,
             avg_speed FLOAT,
             PRIMARY KEY (file_reference)
         )''',
@@ -54,12 +59,16 @@ def setup_database(cursor, database_name):
             laps_on_f INT,
             laps_on_r INT,
             lap INT,
-            lap_time TIME,
+            lap_time TIME(3),
             pit VARCHAR(255),
-            sec_one TIME,
-            sec_two TIME,
-            sec_thr TIME,
-            sec_four TIME,
+            sec_one TIME(3),
+            valid_one TINYINT,
+            sec_two TIME(3),
+            valid_two TINYINT,
+            sec_thr TIME(3),
+            valid_thr TINYINT,
+            sec_four TIME(3),
+            valid_four TINYINT,
             avg_speed FLOAT,
             PRIMARY KEY (file_reference)
         )''',
@@ -75,12 +84,16 @@ def setup_database(cursor, database_name):
             laps_on_f INT,
             laps_on_r INT,
             lap INT,
-            lap_time TIME,
+            lap_time TIME(3),
             pit VARCHAR(255),
-            sec_one TIME,
-            sec_two TIME,
-            sec_thr TIME,
-            sec_four TIME,
+            sec_one TIME(3),
+            valid_one TINYINT,
+            sec_two TIME(3),
+            valid_two TINYINT,
+            sec_thr TIME(3),
+            valid_thr TINYINT,
+            sec_four TIME(3),
+            valid_four TINYINT,
             avg_speed FLOAT,
             PRIMARY KEY (file_reference)
         )''',
@@ -120,6 +133,8 @@ def identify_lge(filename):
 
 def insert_data(cursor, table_name, data_dict):
     # print("insert_data")
+    print("insert_data")
+    print("Data being inserted:", data_dict)
     columns = ', '.join(data_dict.keys())
     placeholder = ', '.join(['%s'] * len(data_dict))
     query = f"INSERT IGNORE INTO {table_name} ({columns}) VALUES ({placeholder})"
@@ -127,8 +142,15 @@ def insert_data(cursor, table_name, data_dict):
 
 def extract_lap_data(row, fileRef):
     """Extract data for the Laps table."""
-    # print("extract_lap_data")
     month_number = convert_month_to_number(row['month'])
+    # print("extract_lap_data")
+
+    lap_time, valid_lap = convert_lap_time(row.get('lap_time', None))
+    sec_one, valid_one = convert_lap_time(row.get('sec_one', None))
+    sec_two, valid_two = convert_lap_time(row.get('sec_two', None))
+    sec_thr, valid_thr = convert_lap_time(row.get('sec_thr', None))
+    sec_four, valid_four = convert_lap_time(row.get('sec_four', None))
+
     return {
         'file_reference': fileRef,
         'event_date': f"{row['yr']}-{month_number}-{row['day']}",
@@ -141,12 +163,16 @@ def extract_lap_data(row, fileRef):
         'laps_on_f': row.get('laps_on_f', None),
         'laps_on_r': row.get('laps_on_r', None),
         'lap': row.get('lap_num', None),
-        'lap_time': row.get('lap_time', None),
+        'lap_time': lap_time,
         'pit': row.get('pit', None),
-        'sec_one': row.get('sec_one', None),
-        'sec_two': row.get('sec_two', None),
-        'sec_thr': row.get('sec_thr', None),
-        'sec_four': row.get('sec_four', None),
+        'sec_one': sec_one,
+        'valid_one': valid_one,
+        'sec_two': sec_two,
+        'valid_two': valid_two,
+        'sec_thr': sec_thr,
+        'valid_thr': valid_thr,
+        'sec_four': sec_four,
+        'valid_four': valid_four,
         'avg_speed': row.get('avg_speed', None)
     }
 
