@@ -1,7 +1,5 @@
-# imports
 import csv
 from dataCleaningHelpers import *
-
 
 def setup_database(cursor, database_name):
     """
@@ -30,12 +28,13 @@ def setup_database(cursor, database_name):
             lge VARCHAR(255),
             ses_type VARCHAR(255),
             rider_name VARCHAR(255),
+            manufacturer VARCHAR(255),
             run INT,
+            lap INT,
             f_tire VARCHAR(255),
             r_tire VARCHAR(255),
             laps_on_f INT,
             laps_on_r INT,
-            lap INT,
             lap_time TIME(3),
             pit VARCHAR(255),
             sec_one TIME(3),
@@ -55,12 +54,13 @@ def setup_database(cursor, database_name):
             lge VARCHAR(255),
             ses_type VARCHAR(255),
             rider_name VARCHAR(255),
+            manufacturer VARCHAR(255),
             run INT,
+            lap INT,
             f_tire VARCHAR(255),
             r_tire VARCHAR(255),
             laps_on_f INT,
             laps_on_r INT,
-            lap INT,
             lap_time TIME(3),
             pit VARCHAR(255),
             sec_one TIME(3),
@@ -80,12 +80,13 @@ def setup_database(cursor, database_name):
             lge VARCHAR(255),
             ses_type VARCHAR(255),
             rider_name VARCHAR(255),
+            manufacturer VARCHAR(255),
             run INT,
+            lap INT,
             f_tire VARCHAR(255),
             r_tire VARCHAR(255),
             laps_on_f INT,
             laps_on_r INT,
-            lap INT,
             lap_time TIME(3),
             pit VARCHAR(255),
             sec_one TIME(3),
@@ -135,8 +136,6 @@ def identify_lge(filename):
 
 def insert_data(cursor, table_name, data_dict):
     # print("insert_data")
-    print("insert_data")
-    print("Data being inserted:", data_dict)
     columns = ', '.join(data_dict.keys())
     placeholder = ', '.join(['%s'] * len(data_dict))
     query = f"INSERT IGNORE INTO {table_name} ({columns}) VALUES ({placeholder})"
@@ -159,7 +158,8 @@ def extract_lap_data(row, fileRef):
         'lge': row['lge'],
         'ses_type': row['session'],
         'rider_name': f"{row['f_name']} {row['l_name']}",
-        'run': row.get('run', None),
+        'manufacturer': row.get('manu', None),
+        'run': row.get('run_num', None),
         'f_tire': row.get('f_tire', None),
         'r_tire': row.get('r_tire', None),
         'laps_on_f': row.get('laps_on_f', None),
@@ -175,7 +175,7 @@ def extract_lap_data(row, fileRef):
         'valid_thr': valid_thr,
         'sec_four': sec_four,
         'valid_four': valid_four,
-        'avg_speed': row.get('avg_speed', None)
+        'avg_speed': row.get('avg_spd', None)
     }
 
 def extract_session_data(row):

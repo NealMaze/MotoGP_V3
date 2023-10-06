@@ -5,8 +5,8 @@ from importHelpers import *
 import winsound
 # from getpass import getpass
 
-frequency = 1500  # Set Frequency To 2500 Hertz
-duration = 400  # Set Duration To 1000 ms == 1 second
+frequency = 1000
+duration = 300
 
 user = 'linroot'
 print('user: linroot')
@@ -30,10 +30,8 @@ try:
         setup_database(cursor, database_name)
 
         # Prompt user for year of data to import
-        # year = input("Enter the year to import data from.\n> ")
-        # rnd = input("Enter the round to import data from.\n(to import all files, please enter 'all'\n> ")
-        year = "2021"
-        rnd = "2"
+        year = input("Enter the year to import data from.\n> ")
+        rnd = input("Enter the round to import data from.\n(to import all files, please enter 'all'\n> ")
 
         csv_dir = 'G:\Shared drives\MotoGP-Project\csvFiles\sessions'
 
@@ -51,8 +49,4 @@ try:
 except mysql.connector.Error as err:
     print(f"Error: {err}\n")
 
-winsound.Beep(frequency, duration)
-winsound.Beep(frequency, duration)
-winsound.Beep(frequency, duration)
-winsound.Beep(frequency, duration)
-winsound.Beep(frequency, duration)
+play_mario()
