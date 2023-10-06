@@ -32,7 +32,7 @@ try:
 
         # Prompt user for year of data to import
         year = input("Enter the year to import data from.\n> ")
-        rnd = input("Enter the round to import data from.\n(to import all files, please enter 'all'\n> ")
+        rnd = input("Enter the round # to import data from.\n(to import all files, please enter 'all')\n> ")
 
         csv_dir = 'G:\Shared drives\MotoGP-Project\csvFiles\sessions'
 

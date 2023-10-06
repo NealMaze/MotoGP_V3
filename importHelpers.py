@@ -9,11 +9,37 @@ def setup_database(cursor, database_name):
     - cursor (cursor object): MySQL cursor object to execute commands.
     - database_name (str): The name of the database to create and use.
     """
-    # print("setup_database")
-
     # Create the database if it doesn't exist
     cursor.execute(f"CREATE DATABASE IF NOT EXISTS {database_name}")
     cursor.execute(f"USE {database_name}")  # Switch to the database
+
+    # Define common structure for laps tables
+    laps_structure = '''(
+        file_reference VARCHAR(255),
+        event_date DATE,
+        lge VARCHAR(255),
+        ses_type VARCHAR(255),
+        rider_name VARCHAR(255),
+        manufacturer VARCHAR(255),
+        run INT,
+        lap INT,
+        f_tire VARCHAR(255),
+        r_tire VARCHAR(255),
+        laps_on_f INT,
+        laps_on_r INT,
+        lap_time TIME(3),
+        pit VARCHAR(255),
+        sec_one TIME(3),
+        valid_one TINYINT,
+        sec_two TIME(3),
+        valid_two TINYINT,
+        sec_thr TIME(3),
+        valid_thr TINYINT,
+        sec_four TIME(3),
+        valid_four TINYINT,
+        avg_speed FLOAT,
+        PRIMARY KEY (file_reference)
+    )'''
 
     # Define tables and their respective columns
     tables = {
@@ -21,84 +47,6 @@ def setup_database(cursor, database_name):
             file_name VARCHAR(255),
             process_status VARCHAR(255),
             PRIMARY KEY (file_name)
-        )''',
-        'MotoGP_Laps': '''(
-            file_reference VARCHAR(255),
-            event_date DATE,
-            lge VARCHAR(255),
-            ses_type VARCHAR(255),
-            rider_name VARCHAR(255),
-            manufacturer VARCHAR(255),
-            run INT,
-            lap INT,
-            f_tire VARCHAR(255),
-            r_tire VARCHAR(255),
-            laps_on_f INT,
-            laps_on_r INT,
-            lap_time TIME(3),
-            pit VARCHAR(255),
-            sec_one TIME(3),
-            valid_one TINYINT,
-            sec_two TIME(3),
-            valid_two TINYINT,
-            sec_thr TIME(3),
-            valid_thr TINYINT,
-            sec_four TIME(3),
-            valid_four TINYINT,
-            avg_speed FLOAT,
-            PRIMARY KEY (file_reference)
-        )''',
-        'Moto2_Laps': '''(
-            file_reference VARCHAR(255),
-            event_date DATE,
-            lge VARCHAR(255),
-            ses_type VARCHAR(255),
-            rider_name VARCHAR(255),
-            manufacturer VARCHAR(255),
-            run INT,
-            lap INT,
-            f_tire VARCHAR(255),
-            r_tire VARCHAR(255),
-            laps_on_f INT,
-            laps_on_r INT,
-            lap_time TIME(3),
-            pit VARCHAR(255),
-            sec_one TIME(3),
-            valid_one TINYINT,
-            sec_two TIME(3),
-            valid_two TINYINT,
-            sec_thr TIME(3),
-            valid_thr TINYINT,
-            sec_four TIME(3),
-            valid_four TINYINT,
-            avg_speed FLOAT,
-            PRIMARY KEY (file_reference)
-        )''',
-        'Moto3_Laps': '''(
-            file_reference VARCHAR(255),
-            event_date DATE,
-            lge VARCHAR(255),
-            ses_type VARCHAR(255),
-            rider_name VARCHAR(255),
-            manufacturer VARCHAR(255),
-            run INT,
-            lap INT,
-            f_tire VARCHAR(255),
-            r_tire VARCHAR(255),
-            laps_on_f INT,
-            laps_on_r INT,
-            lap_time TIME(3),
-            pit VARCHAR(255),
-            sec_one TIME(3),
-            valid_one TINYINT,
-            sec_two TIME(3),
-            valid_two TINYINT,
-            sec_thr TIME(3),
-            valid_thr TINYINT,
-            sec_four TIME(3),
-            valid_four TINYINT,
-            avg_speed FLOAT,
-            PRIMARY KEY (file_reference)
         )''',
         'Sessions': '''(
             event_date DATE,
@@ -120,12 +68,15 @@ def setup_database(cursor, database_name):
             height FLOAT,
             weight FLOAT
         )'''
-        # ... Add definitions for other tables as needed
     }
+
+    # Add laps tables dynamically to the tables dictionary
+    leagues = ['MotoGP', 'Moto2', 'Moto3', 'MotoE', '125cc', '250cc']
+    for league in leagues:
+        tables[f"{league}_Laps"] = laps_structure
 
     # Create tables if they don't exist
     for table, columns in tables.items():
-        print(table)
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {table} {columns}")
 
 def identify_lge(filename):
