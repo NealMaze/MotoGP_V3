@@ -1,5 +1,7 @@
+# imports
 import csv
 from dataCleaningHelpers import *
+
 
 def setup_database(cursor, database_name):
     """
