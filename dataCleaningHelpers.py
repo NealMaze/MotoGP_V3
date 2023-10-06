@@ -1,13 +1,27 @@
 # imports
 import time
 import winsound
+import mysql.connector
 
-# def handle_missing_values(row):
-#     """Handle missing values for a given row."""
-#     non_null_columns = ["month", "day",""]
-#
-#
-#     return row, is_valid
+def is_file_processed(cursor, filename):
+    """Check if a file has already been processed.
+
+    Args:
+    - cursor: Active MySQL cursor object.
+    - filename (str): Name of the file to check.
+
+    Returns:
+    - bool: True if the file is in the Processed_Files table, otherwise False.
+    """
+
+    # Query to check if filename exists in Processed_Files
+    query = "SELECT COUNT(*) FROM Processed_Files WHERE file_name = %s"
+
+    cursor.execute(query, (filename,))
+    count = cursor.fetchone()[0]
+
+    # If count > 0, it means filename exists in the table
+    return count > 0
 
 def correct_data_types(row):
     """Ensure that data types of the row are consistent with the schema."""
@@ -170,3 +184,5 @@ def play_ode_to_joy():
     for note, duration in zip(melody, durations):
         winsound.Beep(note, duration)
         time.sleep(50/1000)
+
+

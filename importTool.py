@@ -2,6 +2,7 @@
 import os
 import mysql.connector
 from importHelpers import *
+from dataCleaningHelpers import *
 import winsound
 # from getpass import getpass
 
@@ -41,10 +42,14 @@ try:
 
         # Loop over the identified CSV files and import data to the respective tables
         for file in csv_files:
-            print(f"{file}")
             winsound.Beep(frequency, duration)
-            league = identify_lge(file)
-            process_csv_file(os.path.join(csv_dir, file), cursor, league, conn)
+
+            if not is_file_processed(cursor, file):
+                print(f"{file}")
+                league = identify_lge(file)
+                process_csv_file(os.path.join(csv_dir, file), cursor, league, conn)
+
+            else: print (f"\n   ###   ###   ###   \nfile already processed\n{file}\n   ###   ###   ###   \n")
 
 except mysql.connector.Error as err:
     print(f"Error: {err}\n")
