@@ -42,7 +42,7 @@ def process_section_time(time_str):
         valid_lap = 0
 
     cleaned_time = time_str.rstrip('*')  # Remove asterisk from the end, if present
-    print("process_section_time")
+    # print("process_section_time")
 
     return cleaned_time, valid_lap
 
@@ -73,7 +73,7 @@ def play_mario():
     F5 = 698  # Added definition for F5
 
     # Increase the duration values to slow down the theme
-    factor = 1.5  # Adjust this factor to make it slower or faster
+    factor = 2.0  # Adjust this factor to make it slower or faster
 
     winsound.Beep(E5, int(100*factor))
     winsound.Beep(E5, int(100*factor))
