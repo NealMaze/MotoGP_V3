@@ -1,0 +1,11 @@
+certifi==2022.12.7
+charset-normalizer==3.0.1
+decorator==5.1.1
+idna==3.4
+py==1.11.0
+requests==2.28.2
+retry==0.9.2
+six==1.16.0
+soupsieve==2.4
+urllib3==1.26.14
+webencodings==0.5.1
